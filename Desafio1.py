@@ -19,7 +19,7 @@ while True:
     opcao = input(menu).lower()
 
     if opcao =="d":
-        print("Deposito \n")
+        print("===== Deposito =====\n")
         deposito = float(input("Digite o valor de depósito: "))
         
         if deposito > 0:
@@ -31,7 +31,7 @@ while True:
             print("Valor de depósito inválido")
     
     elif opcao == "s":
-        print("Saque \n")
+        print("===== Saque =====\n")
         saque = float(input("Digite o valor de saque: "))
         
         if numero_saques < LIMITE_SAQUES:
