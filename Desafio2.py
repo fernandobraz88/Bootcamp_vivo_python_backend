@@ -21,12 +21,12 @@ def filtrar_usuario(usuarios_db, cpf):
             return usuario
     return None
 
-def criar_conta(contas_db, usuarios_db):
+def criar_conta(agencia, contas_db, usuarios_db):
     cpf = input("Digite o CPF do usuário para criar a conta: ")
     usuario = filtrar_usuario(usuarios_db, cpf)
     if usuario:
         numero_conta = len(contas_db) + 1  
-        nova_conta = {'numero_conta': numero_conta, 'cpf': cpf, 'saldo': 0.0}
+        nova_conta = {'agencia': agencia,'numero_conta': numero_conta, 'cpf': cpf, 'saldo': 0.0}
         contas_db.append(nova_conta)
         print(f"Conta criada com sucesso. Número da conta: {numero_conta}")
     else:
@@ -37,7 +37,7 @@ def listar_contas(contas_db):
         print("Nenhuma conta registrada.")
         return
     for conta in contas_db:
-        print(f"Número da Conta: {conta['numero_conta']}, CPF: {conta['cpf']}, Saldo: R${conta['saldo']:.2f}")
+        print(f"Agencia: {conta['agencia']},Número da Conta: {conta['numero_conta']}, CPF: {conta['cpf']}, Saldo: R${conta['saldo']:.2f}")
 
 #Operações
 def depositar(saldo, valor, extrato,/):
