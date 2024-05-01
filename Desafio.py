@@ -22,7 +22,7 @@ class PessoaFisica(Cliente):
 
 class Conta:
     def __init__(self, saldo, numero, cliente):
-        self._saldo = 0
+        self._saldo = saldo
         self._numero = numero
         self._agencia = "0001"
         self._cliente = cliente
@@ -77,10 +77,51 @@ class Conta:
         
         return True
 class ContaCorrente(Conta):
-    pass
+    def __init__(self, numero, cliente,limite = 500, limite_saques = 3):
+        super().__init__(numero, cliente)
+        self.limite = limite
+        self.limite_saques = limite_saques
+    
+    def sacar(self, valor):
+        numero_saques = len(
+            [transacao for transacao in self.historico.
+             transacoes if transacao['tipo'] == Saque.__name__])
+        
+        excedeu_limite = valor > self.limite
+        excedeu_saques = numero_saques >= self.limite_saques
 
+        if excedeu_limite:
+            print("#### Erro: Valor de saque maior que o limite permitido. ####")
+        elif excedeu_saques:
+            print("#### Erro: Número máximo de saques diarios excedido. ####")
+        else:
+            return super().sacar(valor)
+    
+    def __str__(self):
+        return f'''
+            Agencia: {self.agencia}
+            C/C: {self.numero}
+            Titular: {self.cliente.nome}
+        '''
 class Historico:
-    pass
+    def __init__(self) -> None:
+        self._transacoes = []
+    
+    @property
+    def transacoes(self):
+        return self._transacoes
 
+    def adicionar_transacao(self,transacao):
+        self._transacoes.append(
+            {
+                'tipo': transacao.__class__.__name__,
+                'valor': transacao.valor,
+                'data': datetime.now().strftime("%d/%m/%Y %H:%M:%s")
+            }
+        )
 class Transacao(ABC):
+    pass
+class Saque(Transacao):
+    pass
+class Deposito(Transacao):
     pass
