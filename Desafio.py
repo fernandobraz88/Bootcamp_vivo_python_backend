@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
+import textwrap
 
+### Entidades ###
 class Cliente:
     def __init__(self, endereco):
         self.endereco = endereco
@@ -148,3 +150,128 @@ class Deposito(Transacao):
 
         if sucesso_transacao:
             conta.historico.adicionar_transacao(self)
+
+###  Interface de Usuário ###
+def menu():
+    menu = '''
+        #### BANCO DIO ####
+        [1]\tDepositar
+        [2]\tSacar
+        [3]\tExtrato
+        [4]\tNova Conta
+        [5]\tListar Contas
+        [6]\tNovo Usuário
+        [0]\tSair
+        '''
+    return input(textwrap.dedent(menu))
+
+### Funcionalidades ###
+def filtrar_clientes(cpf, clientes):
+    clientes_filtrados = [cliente for cliente in clientes if cliente.cpf == cpf]
+    return clientes_filtrados[0] if clientes_filtrados else None
+
+def recuperar_conta_cliente(cliente):
+    if not cliente.contas:
+        print("\n #### Cliente não possui conta ainda! ####")
+
+def depositar(clientes):
+    cpf = input("Informe o CPF do Cliente:\n")
+    cliente = filtrar_clientes(cpf, clientes)
+    if not cliente:
+        print('#### Cliente não encontrado! ###')
+        return
+    
+    valor = float(input('Informe o valor do deposito'))
+    transacao = Deposito(valor)
+    conta = recuperar_conta_cliente(cliente)
+    if not conta:
+        return
+    
+    cliente.realizar_transacao(conta, transacao)
+
+def sacar(clientes):
+    cpf = input("Informe o CPF do Cliente:\n")
+    cliente = filtrar_clientes(cpf, clientes)
+    if not cliente:
+        print('#### Cliente não encontrado! ###')
+        return
+    valor = float(input('Informe o valor do saque'))
+    transacao = Saque(valor)
+    conta = recuperar_conta_cliente(cliente)
+    if not conta:
+        return
+    
+    cliente.realizar_transacao(conta, transacao)
+
+def exibir_extrato(clientes):
+    cpf = input("Informe o CPF do Cliente:\n")
+    cliente = filtrar_clientes(cpf, clientes)
+    if not cliente:
+        print('#### Cliente não encontrado! ###')
+        return
+    conta = recuperar_conta_cliente(cliente)
+    if not conta:
+        return
+    
+    print("\n===== Extrato =====\n")
+    transacoes = conta.historico.transacoes
+
+    extrato = ""
+    if not transacoes:
+        extrato = "Não foram realizadas transações ainda."
+    else:
+        for transacao in transacoes:
+            extrao += f"\n {transacao['tipo']}: R${transacao['valor']:.2f}"    
+
+    print(extrato)
+    print(f'\n Saldo: R${conta.saldo:.2f}')
+    print("************************")
+
+def criar_conta(numero_conta, clientes, contas):
+    cpf = input("Informe o CPF do Cliente:\n")
+    cliente = filtrar_clientes(cpf, clientes)
+    if not cliente:
+        print('#### Cliente não encontrado! Não foi possivel criar conta###')
+        return
+    conta = ContaCorrente.nova_conta(cliente=cliente, numero=numero_conta)
+    contas.append(conta)
+    cliente.contas.append(conta)
+
+    print('==== Conta criada com susseço! ====')
+
+def listar_contas(numero_conta, clientes,contas):
+    pass
+def criar_cliente(clientes):
+    pass
+### Aplicação ###
+def main():
+    clientes = []
+    contas = []
+
+    while True:
+        opcao = menu()
+
+        if opcao =='1':
+            depositar(clientes)
+
+        elif opcao =='2':
+            sacar(clientes)
+        
+        elif opcao =='3':
+            exibir_extrato(clientes)
+        
+        elif opcao =='4':
+            numero_conta = len(contas) +1
+            criar_conta(numero_conta, clientes, contas)
+        elif opcao =='5':
+            listar_contas(numero_conta, clientes,contas)
+            
+        elif opcao =='6':
+            criar_cliente(clientes)
+
+        elif opcao =='0':
+            print("==== Obrigado por usar o Banco DIO! ====")
+            break
+        else:
+            print("#### Opção Invalida ####")
+            return
