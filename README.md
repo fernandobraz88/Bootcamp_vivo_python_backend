@@ -1,6 +1,6 @@
 # Banco DIO - Simulador de Operações Bancárias
 
-Este repositório contém um projeto de simulação de operações bancárias desenvolvido como parte do Bootcamp Vivo Python Backend. O projeto foi construído em Python e está organizado em duas branches principais que representam diferentes etapas do desenvolvimento: `main` e `Desafio.V2`.
+Este repositório contém um projeto de simulação de operações bancárias desenvolvido como parte do Bootcamp Vivo Python Backend. O projeto foi construído em Python e está organizado em 3 branches principais que representam diferentes etapas do desenvolvimento: `main`, `Desafio.V2` e `Desafio.V3`.
 
 ## Branches
 
