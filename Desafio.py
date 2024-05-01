@@ -239,10 +239,27 @@ def criar_conta(numero_conta, clientes, contas):
 
     print('==== Conta criada com susseço! ====')
 
-def listar_contas(numero_conta, clientes,contas):
-    pass
+def listar_contas(contas):
+    for conta in contas:
+        print('=' * 100)
+        print(textwrap.dedent(str(conta)))
+
 def criar_cliente(clientes):
-    pass
+    cpf = input("Informe o CPF do Cliente:\n")
+    cliente = filtrar_clientes(cpf, clientes)
+    if cliente:
+        print("\n #### CPF já cadastrado como cliente ####")
+        return
+    
+    nome = input("Informe o nome completo: \n")
+    data_nascimento = input("Informe a data de nascimento (dd-mm--aaaa): \n")
+    endereco = input("Informe o endereco (Logradouro, Nº - Bairro - Cidade/ES): \n")
+
+    cliente = PessoaFisica(nome=nome, data_nascimento=data_nascimento, endereco=endereco, cpf=cpf,)
+    clientes.append(cliente)
+
+    print('\n ==== Cliente criado com Sucesso! ====')
+
 ### Aplicação ###
 def main():
     clientes = []
@@ -275,3 +292,5 @@ def main():
         else:
             print("#### Opção Invalida ####")
             return
+      
+main()
